@@ -1,4 +1,5 @@
-package com.gav1s.mtmdb.framework.ui.main
+package com.gav1s.mtmdb.framework.ui.main_fragment
+
 
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.MutableLiveData
@@ -12,9 +13,9 @@ class MainViewModel(private val repository: Repository) : ViewModel(), Lifecycle
     private val liveDataToObserve: MutableLiveData<AppState> = MutableLiveData()
 
     fun getLiveData() = liveDataToObserve
-    fun getMyData() = getDataFromLocalSource()
+    fun getData() = getNewDataFromLocalSource()
 
-    private fun getDataFromLocalSource() {
+    private fun getNewDataFromLocalSource() {
         liveDataToObserve.value = AppState.Loading
         Thread {
             sleep(2000)
@@ -22,7 +23,8 @@ class MainViewModel(private val repository: Repository) : ViewModel(), Lifecycle
                 when (Random.nextInt(5)) {
                     0 -> liveDataToObserve.postValue(
                         AppState.Success(
-                            repository.getWeatherFromLocalStorage()
+                            repository.getNewMovieFromLocalStorage(),
+                            repository.getTopMovieFromLocalStorage()
                         ))
                     1 -> throw Exception("No connect with server!")
                     else -> throw Exception("Error download data!")
