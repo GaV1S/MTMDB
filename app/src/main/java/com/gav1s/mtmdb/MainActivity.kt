@@ -2,7 +2,7 @@ package com.gav1s.mtmdb
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.gav1s.mtmdb.framework.ui.main.MainFragment
+import com.gav1s.mtmdb.framework.ui.main_fragment.MainFragment
 
 class MainActivity : AppCompatActivity() {
 
