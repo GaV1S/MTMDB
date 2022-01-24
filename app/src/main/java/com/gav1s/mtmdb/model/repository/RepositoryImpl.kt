@@ -5,10 +5,7 @@ import com.gav1s.mtmdb.model.entities.getNewMovies
 import com.gav1s.mtmdb.model.entities.getTopMovies
 
 class RepositoryImpl : Repository {
-    override fun getMovieFromServer(): Movie {
-        return Movie()
-    }
-
+    override fun getMovieFromServer() = Movie()
     override fun getNewMovieFromLocalStorage() = getNewMovies()
     override fun getTopMovieFromLocalStorage() = getTopMovies()
 }
