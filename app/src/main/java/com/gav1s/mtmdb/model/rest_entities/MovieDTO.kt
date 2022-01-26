@@ -1,10 +1,10 @@
-package com.gav1s.mtmdb.model.entities
+package com.gav1s.mtmdb.model.rest_entities
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class Movie(
+data class MovieDTO(
     val id: Int,
     val overview: String?,
     val popularity: Number?,
