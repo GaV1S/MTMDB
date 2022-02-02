@@ -8,7 +8,7 @@ import com.gav1s.mtmdb.model.repository.Repository
 import com.gav1s.mtmdb.model.repository.RepositoryImpl
 
 val appModule = module {
-    single<Repository> { RepositoryImpl() }
+    single<Repository> { RepositoryImpl(get()) }
 
     //View models
     viewModel { MainViewModel(get()) }
