@@ -4,6 +4,7 @@ import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.gav1s.mtmdb.model.AppState
+import com.gav1s.mtmdb.model.entities.History
 import com.gav1s.mtmdb.model.entities.Movie
 import com.gav1s.mtmdb.model.repository.*
 import retrofit2.Call
@@ -11,13 +12,17 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class DetailsViewModel(
-    private val repository: RepositoryImpl = RepositoryImpl(RemoteDataSource())
-) : ViewModel(), LifecycleObserver {
+    private val repository: RepositoryImpl = RepositoryImpl(RemoteDataSource()),
+) : ViewModel(), LifecycleObserver{
     val liveData: MutableLiveData<AppState> = MutableLiveData()
 
     fun getMovieFromRemoteSource(id: Int) {
         liveData.value = AppState.Loading
         repository.getMovieDetailsFromServer(id, callback)
+    }
+
+    fun saveToHistory(history: History) {
+        repository.saveToHistory(history)
     }
 
     private val callback = object :

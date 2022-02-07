@@ -3,22 +3,29 @@ package com.gav1s.mtmdb.framework.ui.main_fragment
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.gav1s.mtmdb.model.AppState
+import com.gav1s.mtmdb.model.entities.MoviesList
+import com.gav1s.mtmdb.model.repository.REQUEST_ERROR
+import com.gav1s.mtmdb.model.repository.RemoteDataSource
+import com.gav1s.mtmdb.model.repository.RepositoryImpl
+import com.gav1s.mtmdb.model.repository.SERVER_ERROR
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import com.gav1s.mtmdb.model.AppState
-import com.gav1s.mtmdb.model.entities.MoviesList
-import com.gav1s.mtmdb.model.repository.*
-import java.lang.Thread.sleep
 
 class MainViewModel(
     private val repository: RepositoryImpl = RepositoryImpl(RemoteDataSource()),
-) : ViewModel(), LifecycleObserver {
+) : ViewModel(), LifecycleObserver, CoroutineScope by MainScope() {
     val liveData: MutableLiveData<AppState> = MutableLiveData()
 
     fun getNewDataFromServer() {
-        liveData.value = AppState.Loading
-        repository.getNewMoviesListFromServer(callback)
+        launch {
+            liveData.value = AppState.Loading
+            repository.getNewMoviesListFromServer(callback)
+        }
     }
 
     private val callback = object :

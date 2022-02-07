@@ -1,5 +1,6 @@
 package com.gav1s.mtmdb.model.repository
 
+import com.gav1s.mtmdb.model.entities.History
 import com.gav1s.mtmdb.model.entities.Movie
 import com.gav1s.mtmdb.model.entities.MoviesList
 
@@ -12,4 +13,8 @@ interface Repository {
         id: Int,
         callback: retrofit2.Callback<Movie>
     )
+
+    fun saveToHistory(history: History)
+
+    fun getAllHistory(): List<History>
 }

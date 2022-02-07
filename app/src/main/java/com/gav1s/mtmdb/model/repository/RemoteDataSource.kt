@@ -1,15 +1,16 @@
 package com.gav1s.mtmdb.model.repository
 
+import com.gav1s.mtmdb.BuildConfig
+import com.gav1s.mtmdb.model.entities.Movie
+import com.gav1s.mtmdb.model.entities.MoviesList
 import com.google.gson.GsonBuilder
 import retrofit2.Callback
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import com.gav1s.mtmdb.BuildConfig
-import com.gav1s.mtmdb.model.entities.Movie
-import com.gav1s.mtmdb.model.entities.MoviesList
 
 const val BASE_URL = "https://api.themoviedb.org/"
-const val LOCALE = "ru-Ru"
+const val BASE_IMAGE_URL = "https://image.tmdb.org/t/p/original"
+const val LOCALE = "ru"
 const val NEW_LIST_CATEGORY = "now_playing"
 const val TOP_LIST_CATEGORY = "top_rated"
 const val SERVER_ERROR = "Ошибка сервера"
