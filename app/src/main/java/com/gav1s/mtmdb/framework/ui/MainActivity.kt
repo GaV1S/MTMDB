@@ -8,10 +8,11 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.gav1s.mtmdb.R
+import com.gav1s.mtmdb.framework.AppSettings
+import com.gav1s.mtmdb.framework.ui.contacts_fragment.ContactsFragment
+import com.gav1s.mtmdb.framework.ui.history_fragment.HistoryFragment
 import com.gav1s.mtmdb.framework.ui.main_fragment.MainFragment
 import com.gav1s.mtmdb.framework.ui.settings_fragment.SettingsFragment
-import com.gav1s.mtmdb.framework.AppSettings
-import com.gav1s.mtmdb.framework.ui.history_fragment.HistoryFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -52,6 +53,10 @@ class MainActivity : AppCompatActivity() {
             }
             R.id.actionHistory -> {
                 openFragment(HistoryFragment.newInstance())
+                true
+            }
+            R.id.actionContacts -> {
+                openFragment(ContactsFragment.newInstance())
                 true
             }
             R.id.actionFavorites -> {
