@@ -3,7 +3,9 @@ package com.gav1s.mtmdb.framework.ui.details_fragment
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.gav1s.mtmdb.model.AppState
+import com.gav1s.mtmdb.model.CreditsState
+import com.gav1s.mtmdb.model.MovieState
+import com.gav1s.mtmdb.model.entities.Credits
 import com.gav1s.mtmdb.model.entities.History
 import com.gav1s.mtmdb.model.entities.Movie
 import com.gav1s.mtmdb.model.repository.*
@@ -14,15 +16,20 @@ import retrofit2.Response
 class DetailsViewModel(
     private val repository: RepositoryImpl = RepositoryImpl(RemoteDataSource()),
 ) : ViewModel(), LifecycleObserver{
-    val liveData: MutableLiveData<AppState> = MutableLiveData()
+    val liveData: MutableLiveData<MovieState> = MutableLiveData()
+    val creditsLiveData: MutableLiveData<CreditsState> = MutableLiveData()
 
     fun getMovieFromRemoteSource(id: Int) {
-        liveData.value = AppState.Loading
+        liveData.value = MovieState.Loading
         repository.getMovieDetailsFromServer(id, callback)
     }
 
     fun saveToHistory(history: History) {
         repository.saveToHistory(history)
+    }
+
+    fun getCredits(id: Int) {
+        repository.getCreditsFromServer(id, callbackCredits)
     }
 
     private val callback = object :
@@ -33,20 +40,46 @@ class DetailsViewModel(
                 if (response.isSuccessful && serverResponse != null) {
                     checkResponse(serverResponse)
                 } else {
-                    AppState.Error(Throwable(SERVER_ERROR))
+                    MovieState.Error(Throwable(SERVER_ERROR))
                 }
             )
         }
 
         override fun onFailure(call: Call<Movie>, t: Throwable) {
-            liveData.postValue(AppState.Error(Throwable(t.message ?: REQUEST_ERROR)))
+            liveData.postValue(MovieState.Error(Throwable(t.message ?: REQUEST_ERROR)))
         }
 
-        private fun checkResponse(serverResponse: Movie): AppState {
+        private fun checkResponse(serverResponse: Movie): MovieState {
             return if (serverResponse.overview == null) {
-                AppState.Error(Throwable(CORRUPTED_DATA))
+                MovieState.Error(Throwable(CORRUPTED_DATA))
             } else {
-                AppState.Success(listOf(serverResponse))
+                MovieState.Success(listOf(serverResponse))
+            }
+        }
+    }
+
+    private val callbackCredits = object :
+        Callback<Credits> {
+        override fun onResponse(call: Call<Credits>, response: Response<Credits>) {
+            val serverResponse: Credits? = response.body()
+            creditsLiveData.postValue(
+                if (response.isSuccessful && serverResponse != null) {
+                    checkResponse(serverResponse)
+                } else {
+                    CreditsState.Error(Throwable(SERVER_ERROR))
+                }
+            )
+        }
+
+        override fun onFailure(call: Call<Credits>, t: Throwable) {
+            creditsLiveData.postValue(CreditsState.Error(Throwable(t.message ?: REQUEST_ERROR)))
+        }
+
+        private fun checkResponse(serverResponse: Credits): CreditsState {
+            return if (serverResponse.cast == null) {
+                CreditsState.Error(Throwable(CORRUPTED_DATA))
+            } else {
+                CreditsState.Success(serverResponse.cast)
             }
         }
     }

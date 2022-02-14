@@ -1,8 +1,7 @@
 package com.gav1s.mtmdb.model.repository
 
-import com.gav1s.mtmdb.model.entities.History
-import com.gav1s.mtmdb.model.entities.Movie
-import com.gav1s.mtmdb.model.entities.MoviesList
+import com.gav1s.mtmdb.model.entities.*
+import retrofit2.Callback
 
 interface Repository {
     fun getNewMoviesListFromServer(
@@ -17,4 +16,6 @@ interface Repository {
     fun saveToHistory(history: History)
 
     fun getAllHistory(): List<History>
+    fun getCreditsFromServer(id: Int, callback: Callback<Credits>)
+    fun getPersonFromServer(id: Int, callback: Callback<Person>)
 }

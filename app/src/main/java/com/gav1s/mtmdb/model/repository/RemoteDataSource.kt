@@ -1,8 +1,10 @@
 package com.gav1s.mtmdb.model.repository
 
 import com.gav1s.mtmdb.BuildConfig
+import com.gav1s.mtmdb.model.entities.Credits
 import com.gav1s.mtmdb.model.entities.Movie
 import com.gav1s.mtmdb.model.entities.MoviesList
+import com.gav1s.mtmdb.model.entities.Person
 import com.google.gson.GsonBuilder
 import retrofit2.Callback
 import retrofit2.Retrofit
@@ -37,6 +39,24 @@ class RemoteDataSource {
         )
         .build().create(MoviesListAPI::class.java)
 
+    private val creditsAPI = Retrofit.Builder()
+        .baseUrl(BASE_URL)
+        .addConverterFactory(
+            GsonConverterFactory.create(
+                GsonBuilder().setLenient().create()
+            )
+        )
+        .build().create(CreditsAPI::class.java)
+
+    private val personAPI = Retrofit.Builder()
+        .baseUrl(BASE_URL)
+        .addConverterFactory(
+            GsonConverterFactory.create(
+                GsonBuilder().setLenient().create()
+            )
+        )
+        .build().create(PersonAPI::class.java)
+
     fun getMovieDetails(id: Int, callback: Callback<Movie>) {
         movieAPI.getMovie(id, BuildConfig.TMDB_API_KEY, LOCALE)
             .enqueue(callback)
@@ -44,6 +64,16 @@ class RemoteDataSource {
 
     fun getNewMoviesList(callback: Callback<MoviesList>) {
         moviesListAPI.getMoviesList(NEW_LIST_CATEGORY, BuildConfig.TMDB_API_KEY, LOCALE)
+            .enqueue(callback)
+    }
+
+    fun getCredits(id: Int, callback: Callback<Credits>) {
+        creditsAPI.getCredits(id, BuildConfig.TMDB_API_KEY, LOCALE)
+            .enqueue(callback)
+    }
+
+    fun getPersonDetails(id: Int, callback: Callback<Person>) {
+        personAPI.getPerson(id, BuildConfig.TMDB_API_KEY, LOCALE)
             .enqueue(callback)
     }
 }

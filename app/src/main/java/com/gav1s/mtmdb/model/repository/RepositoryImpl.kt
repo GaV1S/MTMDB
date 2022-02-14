@@ -1,11 +1,9 @@
 package com.gav1s.mtmdb.model.repository
 
-import retrofit2.Callback
 import com.gav1s.mtmdb.model.database.Database
 import com.gav1s.mtmdb.model.database.HistoryEntity
-import com.gav1s.mtmdb.model.entities.History
-import com.gav1s.mtmdb.model.entities.Movie
-import com.gav1s.mtmdb.model.entities.MoviesList
+import com.gav1s.mtmdb.model.entities.*
+import retrofit2.Callback
 
 class RepositoryImpl(
     private val remoteDataSource: RemoteDataSource,
@@ -17,6 +15,14 @@ class RepositoryImpl(
 
     override fun getMovieDetailsFromServer(id: Int, callback: Callback<Movie>) {
         remoteDataSource.getMovieDetails(id, callback)
+    }
+
+    override fun getCreditsFromServer(id: Int, callback: Callback<Credits>) {
+        remoteDataSource.getCredits(id, callback)
+    }
+
+    override fun getPersonFromServer(id: Int, callback: Callback<Person>) {
+        remoteDataSource.getPersonDetails(id, callback)
     }
 
     override fun saveToHistory(history: History) {

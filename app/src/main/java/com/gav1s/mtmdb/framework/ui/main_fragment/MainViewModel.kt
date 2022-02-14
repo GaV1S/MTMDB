@@ -3,7 +3,7 @@ package com.gav1s.mtmdb.framework.ui.main_fragment
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.gav1s.mtmdb.model.AppState
+import com.gav1s.mtmdb.model.MovieState
 import com.gav1s.mtmdb.model.entities.MoviesList
 import com.gav1s.mtmdb.model.repository.REQUEST_ERROR
 import com.gav1s.mtmdb.model.repository.RemoteDataSource
@@ -19,11 +19,11 @@ import retrofit2.Response
 class MainViewModel(
     private val repository: RepositoryImpl = RepositoryImpl(RemoteDataSource()),
 ) : ViewModel(), LifecycleObserver, CoroutineScope by MainScope() {
-    val liveData: MutableLiveData<AppState> = MutableLiveData()
+    val liveData: MutableLiveData<MovieState> = MutableLiveData()
 
     fun getNewDataFromServer() {
         launch {
-            liveData.value = AppState.Loading
+            liveData.value = MovieState.Loading
             repository.getNewMoviesListFromServer(callback)
         }
     }
@@ -36,17 +36,17 @@ class MainViewModel(
                 if (response.isSuccessful && serverResponse != null) {
                     checkResponse(serverResponse)
                 } else {
-                    AppState.Error(Throwable(SERVER_ERROR))
+                    MovieState.Error(Throwable(SERVER_ERROR))
                 }
             )
         }
 
         override fun onFailure(call: Call<MoviesList>, t: Throwable) {
-            liveData.postValue(AppState.Error(Throwable(t.message ?: REQUEST_ERROR)))
+            liveData.postValue(MovieState.Error(Throwable(t.message ?: REQUEST_ERROR)))
         }
 
-        private fun checkResponse(serverResponse: MoviesList): AppState {
-            return AppState.Success(serverResponse.results)
+        private fun checkResponse(serverResponse: MoviesList): MovieState {
+            return MovieState.Success(serverResponse.results)
         }
     }
 }

@@ -10,7 +10,7 @@ import com.gav1s.mtmdb.databinding.FragmentMainBinding
 import com.gav1s.mtmdb.framework.AppSettings
 import com.gav1s.mtmdb.framework.ui.adapters.MainFragmentAdapter
 import com.gav1s.mtmdb.framework.ui.details_fragment.DetailsFragment
-import com.gav1s.mtmdb.model.AppState
+import com.gav1s.mtmdb.model.MovieState
 import com.gav1s.mtmdb.model.entities.Movie
 import com.gav1s.mtmdb.model.repository.RemoteDataSource
 import com.gav1s.mtmdb.model.repository.RepositoryImpl
@@ -43,11 +43,11 @@ class MainFragment : Fragment(), CoroutineScope by MainScope() {
         viewModel.getNewDataFromServer()
     }
 
-    private fun renderData(appState: AppState) = with(binding) {
-        when (appState) {
-            is AppState.Loading ->
+    private fun renderData(movieState: MovieState) = with(binding) {
+        when (movieState) {
+            is MovieState.Loading ->
                 LoadingLayout.visibility = View.VISIBLE
-            is AppState.Success -> {
+            is MovieState.Success -> {
                 LoadingLayout.visibility = View.GONE
                 adapter = MainFragmentAdapter(object : OnItemViewClickListener {
                     override fun onItemViewClick(movie: Movie) {
@@ -65,16 +65,16 @@ class MainFragment : Fragment(), CoroutineScope by MainScope() {
                 }
                 ).apply {
                     setMovies(if (AppSettings.adultShow) {
-                        appState.moviesData
+                        movieState.moviesData
                     } else {
-                        appState.moviesData.filter { !it.adult }
+                        movieState.moviesData.filter { !it.adult }
                     })
                 }
                 RecyclerView.adapter = adapter
             }
-            is AppState.Error -> {
+            is MovieState.Error -> {
                 LoadingLayout.visibility = View.GONE
-                appState.error.localizedMessage?.let {
+                movieState.error.localizedMessage?.let {
                     view?.showSnackBar(
                         it,
                         getString(R.string.reload),
